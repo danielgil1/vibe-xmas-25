@@ -10,6 +10,16 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <script>
+        window.onerror = function (msg, url, line, col, error) {
+            alert("Global Error: " + msg + "\nLine: " + line);
+            console.error(error);
+        };
+        window.addEventListener('unhandledrejection', function (event) {
+            alert("Unhandled Rejection: " + event.reason);
+            console.error(event.reason);
+        });
+    </script>
 </head>
 
 <body>
@@ -30,10 +40,23 @@
                 <h1>Christmas Party Game</h1>
                 <p>Use your hands to play!</p>
                 <div class="input-group">
-                    <label>Player Name:</label>
-                    <input type="text" id="player-name-input" placeholder="Enter Name">
+                    <label>Number of Players:</label>
+                    <select id="player-count">
+                        <option value="1">1 Player</option>
+                        <option value="2">2 Players</option>
+                        <option value="3">3 Players</option>
+                        <option value="4">4 Players</option>
+                    </select>
                 </div>
                 <button id="start-btn">Start Game</button>
+            </div>
+
+            <div id="identity-screen" class="screen">
+                <h2>Your Elf Identity</h2>
+                <div id="identity-avatar" style="font-size: 8rem; margin: 1rem;">🧝</div>
+                <div id="identity-name" style="font-size: 3rem; color: #27ae60; margin-bottom: 2rem;"></div>
+                <p>Remember your name!</p>
+                <button id="identity-next-btn">I'm Ready</button>
             </div>
 
             <div id="hud" class="screen">
@@ -55,14 +78,21 @@
             </div>
 
             <div id="round-end-screen" class="screen">
-                <h2>Round Over!</h2>
+                <h2>Turn Over!</h2>
                 <div id="round-score">Score: 100</div>
+                <button id="next-turn-btn">Next</button>
+            </div>
+
+            <div id="leaderboard-screen" class="screen">
+                <h2>Leaderboard</h2>
+                <div id="leaderboard-list" style="text-align: left; margin: 2rem 0; font-size: 1.5rem;"></div>
                 <button id="next-round-btn">Next Round</button>
             </div>
 
             <div id="game-over-screen" class="screen">
                 <h2>Game Over!</h2>
-                <div id="final-score">Final Score: 300</div>
+                <div id="winner-display" style="font-size: 2rem; color: #f1c40f; margin-bottom: 1rem;"></div>
+                <div id="final-leaderboard" style="text-align: left; margin: 1rem 0;"></div>
                 <button id="restart-btn">Play Again</button>
             </div>
         </div>

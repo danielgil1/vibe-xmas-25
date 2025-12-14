@@ -149,7 +149,7 @@ button:hover {
     background-color: #e74c3c;
 }
 
-input {
+input, select {
     padding: 10px;
     font-size: 1.2rem;
     border-radius: 5px;
