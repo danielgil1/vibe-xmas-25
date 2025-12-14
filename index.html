@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christmas Party Game</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- MediaPipe Hands & Drawing Utilities -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <div id="game-container">
+        <!-- Hidden Video for Processing -->
+        <video id="webcam" autoplay playsinline></video>
+
+        <!-- Game Canvas -->
+        <canvas id="game-canvas"></canvas>
+
+        <!-- UI Layer -->
+        <div id="ui-layer">
+            <button id="mute-btn"
+                style="position: absolute; top: 10px; left: 10px; z-index: 1000; font-size: 2rem; background: none; border: none; cursor: pointer; pointer-events: auto;">🔊</button>
+
+            <div id="start-screen" class="screen active">
+                <h1>Christmas Party Game</h1>
+                <p>Use your hands to play!</p>
+                <div class="input-group">
+                    <label>Player Name:</label>
+                    <input type="text" id="player-name-input" placeholder="Enter Name">
+                </div>
+                <button id="start-btn">Start Game</button>
+            </div>
+
+            <div id="hud" class="screen">
+                <div class="top-bar">
+                    <div id="score-display">Score: 0</div>
+                    <div id="time-display">Time: 60</div>
+                    <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                        <div id="lives-display">Lives: ❤️❤️❤️</div>
+                        <div id="player-display" style="font-size: 1rem; color: #27ae60;"></div>
+                    </div>
+                </div>
+                <div id="theme-title">Round: Preparation</div>
+            </div>
+
+            <div id="countdown-overlay" class="screen" style="background: rgba(0,0,0,0.5); border: none;">
+                <div id="countdown-title"
+                    style="font-size: 3rem; color: #f1c40f; margin-bottom: 2rem; text-shadow: 2px 2px 4px black;"></div>
+                <div id="countdown-text" style="font-size: 10rem; color: white;">5</div>
+            </div>
+
+            <div id="round-end-screen" class="screen">
+                <h2>Round Over!</h2>
+                <div id="round-score">Score: 100</div>
+                <button id="next-round-btn">Next Round</button>
+            </div>
+
+            <div id="game-over-screen" class="screen">
+                <h2>Game Over!</h2>
+                <div id="final-score">Final Score: 300</div>
+                <button id="restart-btn">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="src/main.js"></script>
+</body>
+
+</html>
