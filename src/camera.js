@@ -4,7 +4,9 @@ export class Camera {
         this.canvasElement = document.getElementById('game-canvas');
         this.canvasCtx = this.canvasElement.getContext('2d');
         this.handLandmarks = [];
+        this.faceLandmarks = [];
         this.hands = null;
+        this.faceMesh = null;
         this.camera = null;
         this.isReady = false;
     }
@@ -23,6 +25,20 @@ export class Camera {
         });
 
         this.hands.onResults(this.onResults.bind(this));
+
+        // Initialize MediaPipe Face Mesh
+        this.faceMesh = new FaceMesh({locateFile: (file) => {
+            return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
+        }});
+
+        this.faceMesh.setOptions({
+            maxNumFaces: 1,
+            refineLandmarks: true,
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5
+        });
+
+        this.faceMesh.onResults(this.onFaceResults.bind(this));
 
         // Initialize Camera using native getUserMedia for better control/simpler setup without Utils if preferable,
         // but MediaPipe's CameraUtils is robust. Let's use a simple custom implementation to avoid another dependency if we can,
@@ -64,6 +80,7 @@ export class Camera {
                 return;
             }
             await this.hands.send({image: this.videoElement});
+            await this.faceMesh.send({image: this.videoElement});
             requestAnimationFrame(processFrame);
         };
         processFrame();
@@ -83,6 +100,18 @@ export class Camera {
     
     getLandmarks() {
         return this.handLandmarks; // Returns array of hand arrays
+    }
+
+    getFaceLandmarks() {
+        return this.faceLandmarks; // Returns array of face arrays (usually just one)
+    }
+
+    onFaceResults(results) {
+        if (results.multiFaceLandmarks) {
+            this.faceLandmarks = results.multiFaceLandmarks;
+        } else {
+            this.faceLandmarks = [];
+        }
     }
 
     drawDebug(results) {

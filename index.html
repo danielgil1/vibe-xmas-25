@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
     <script>
         window.onerror = function (msg, url, line, col, error) {
             alert("Global Error: " + msg + "\nLine: " + line);
@@ -47,6 +48,21 @@
                         <option value="3">3 Players</option>
                         <option value="4">4 Players</option>
                     </select>
+                </div>
+
+                <div class="input-group" style="text-align: left; margin: 1rem 0;">
+                    <label>Select Rounds:</label>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+                        <label><input type="checkbox" id="theme-all" checked> Select All</label>
+                        <div style="margin-left: 1rem; display: flex; flex-direction: column; gap: 0.25rem;">
+                            <label><input type="checkbox" class="theme-select" value="0" checked> Christmas Tree
+                                🎄</label>
+                            <label><input type="checkbox" class="theme-select" value="1" checked> Santa Claus 🎅</label>
+                            <label><input type="checkbox" class="theme-select" value="2" checked> Reindeer 🦌</label>
+                            <label><input type="checkbox" class="theme-select" value="3" checked> Sleigh Formula 1
+                                🏎️</label>
+                        </div>
+                    </div>
                 </div>
                 <button id="start-btn">Start Game</button>
             </div>
