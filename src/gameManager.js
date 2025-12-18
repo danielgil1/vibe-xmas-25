@@ -2,6 +2,7 @@ import { Theme } from './themes/theme.js';
 import { ChristmasTreeTheme } from './themes/christmasTree.js';
 import { SantaTheme } from './themes/santa.js';
 import { ReindeerTheme } from './themes/reindeer.js';
+import { SleighFormula1Theme } from './themes/sleighFormula1.js';
 import { SoundManager } from './soundManager.js';
 
 export class GameManager {
@@ -62,6 +63,27 @@ export class GameManager {
         }
 
         this.lastTime = 0;
+
+        // Add listeners for theme selection UI
+        const selectAll = document.getElementById('theme-all');
+        const themeChecks = document.querySelectorAll('.theme-select');
+
+        if (selectAll) {
+            selectAll.addEventListener('change', (e) => {
+                themeChecks.forEach(cb => cb.checked = e.target.checked);
+            });
+        }
+
+        themeChecks.forEach(cb => {
+            cb.addEventListener('change', () => {
+                // If any unchecked, uncheck selectAll. If all checked, check selectAll.
+                const allChecked = Array.from(themeChecks).every(c => c.checked);
+                if (selectAll) selectAll.checked = allChecked;
+            });
+        });
+
+        this.selectedThemeIndices = []; // Indices of themes to play
+        this.themeDeck = []; // Current deck of themes to draw from
     }
 
     // --- Identity Generation ---
@@ -97,7 +119,23 @@ export class GameManager {
         }
 
         this.currentRoundNumber = 1;
+        this.currentRoundNumber = 1;
         this.currentPlayerIndex = 0; // For identity reveal loop
+
+        // --- Initialize Theme Deck ---
+        // Get selected themes
+        const themeChecks = document.querySelectorAll('.theme-select');
+        this.selectedThemeIndices = [];
+        themeChecks.forEach(cb => {
+            if (cb.checked) this.selectedThemeIndices.push(parseInt(cb.value));
+        });
+
+        if (this.selectedThemeIndices.length === 0) {
+            alert("Please select at least one round!");
+            return;
+        }
+
+        this.refillThemeDeck();
 
         // Start Identity Reveal Phase
         this.showIdentity(this.players[0]);
@@ -122,21 +160,40 @@ export class GameManager {
         }
     }
 
+    refillThemeDeck() {
+        // Create a deck from selected indices
+        this.themeDeck = [...this.selectedThemeIndices];
+        // Shuffle (Fisher-Yates)
+        for (let i = this.themeDeck.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.themeDeck[i], this.themeDeck[j]] = [this.themeDeck[j], this.themeDeck[i]];
+        }
+    }
+
     prepareTurn() {
         // Before creating theme, set UI
         const player = this.players[this.currentPlayerIndex];
 
-        // Randomly Select Theme for this turn
-        const themeIndex = Math.floor(Math.random() * 3);
+        // Draw from Deck
+        if (this.themeDeck.length === 0) {
+            this.refillThemeDeck(); // Cycle if exhausted
+        }
+
+        // Remove replacement requirement is handled by popping unique indices from shuffled deck
+        const themeIndex = this.themeDeck.pop();
+
         if (themeIndex === 0) {
             this.activeTheme = new ChristmasTreeTheme(this.ctx, this.canvas.width, this.canvas.height);
             this.currentThemeName = "Christmas Tree";
         } else if (themeIndex === 1) {
             this.activeTheme = new SantaTheme(this.ctx, this.canvas.width, this.canvas.height);
             this.currentThemeName = "Santa Claus";
-        } else {
+        } else if (themeIndex === 2) {
             this.activeTheme = new ReindeerTheme(this.ctx, this.canvas.width, this.canvas.height);
             this.currentThemeName = "Reindeer";
+        } else {
+            this.activeTheme = new SleighFormula1Theme(this.ctx, this.canvas.width, this.canvas.height);
+            this.currentThemeName = "Sleigh Formula 1";
         }
 
         // Start Countdown Logic
@@ -280,8 +337,9 @@ export class GameManager {
 
         // Update Theme Logic
         const handLandmarks = this.camera.getLandmarks();
+        const faceLandmarks = this.camera.getFaceLandmarks();
         if (this.activeTheme) {
-            this.activeTheme.update(deltaTime, handLandmarks, difficultyFactor);
+            this.activeTheme.update(deltaTime, handLandmarks, difficultyFactor, faceLandmarks);
 
             // Check for Fail Condition
             if (this.activeTheme.lives <= 0) {
