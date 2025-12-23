@@ -9,6 +9,8 @@ A festive, webcam-based arcade game where you use your actual hands to catch orn
     1.  **Christmas Tree**: Save the falling ornaments!
     2.  **Santa**: Catch falling gifts and put them back in Santa's Sleigh.
     3.  **Reindeer**: Catch the flying reindeer before they escape.
+    4.  **Sleigh Formula 1**: Race your sleigh through the track!
+    5.  **Christmas Pong**: Play tennis against Santa AI!
 *   **⚡ Increasing Difficulty**: The game gets faster and faster as the 60-second timer ticks down.
 
 ## Tech Stack & Implementation Details
