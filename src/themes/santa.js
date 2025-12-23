@@ -77,7 +77,7 @@ export class SantaTheme extends Theme {
                     // Deposit
                     if (this.checkRectCollision(gift.x + gift.w / 2, gift.y + gift.h / 2,
                         this.sleigh.x, this.sleigh.y, this.sleigh.w, this.sleigh.h)) {
-                        this.score += 10;
+                        this.score += 10; // 10 points per present
                         this.gifts.splice(i, 1);
                         continue;
                     }

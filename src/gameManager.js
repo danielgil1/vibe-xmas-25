@@ -3,6 +3,7 @@ import { ChristmasTreeTheme } from './themes/christmasTree.js';
 import { SantaTheme } from './themes/santa.js';
 import { ReindeerTheme } from './themes/reindeer.js';
 import { SleighFormula1Theme } from './themes/sleighFormula1.js';
+import { ChristmasTennisTheme } from './themes/christmasTennis.js';
 import { SoundManager } from './soundManager.js';
 
 export class GameManager {
@@ -191,9 +192,12 @@ export class GameManager {
         } else if (themeIndex === 2) {
             this.activeTheme = new ReindeerTheme(this.ctx, this.canvas.width, this.canvas.height);
             this.currentThemeName = "Reindeer";
-        } else {
+        } else if (themeIndex === 3) {
             this.activeTheme = new SleighFormula1Theme(this.ctx, this.canvas.width, this.canvas.height);
             this.currentThemeName = "Sleigh Formula 1";
+        } else {
+            this.activeTheme = new ChristmasTennisTheme(this.ctx, this.canvas.width, this.canvas.height);
+            this.currentThemeName = "Christmas Pong";
         }
 
         // Start Countdown Logic
