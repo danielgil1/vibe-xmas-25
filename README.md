@@ -11,6 +11,7 @@ A festive, webcam-based arcade game where you use your actual hands to catch orn
     3.  **Reindeer**: Catch the flying reindeer before they escape.
     4.  **Sleigh Formula 1**: Race your sleigh through the track!
     5.  **Christmas Pong**: Play tennis against Santa AI!
+    6.  **Dragon Grinch**: Breathe fire to burn Christmas trees!
 *   **⚡ Increasing Difficulty**: The game gets faster and faster as the 60-second timer ticks down.
 
 ## Tech Stack & Implementation Details
