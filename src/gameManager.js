@@ -4,6 +4,7 @@ import { SantaTheme } from './themes/santa.js';
 import { ReindeerTheme } from './themes/reindeer.js';
 import { SleighFormula1Theme } from './themes/sleighFormula1.js';
 import { ChristmasTennisTheme } from './themes/christmasTennis.js';
+import { DragonGrinchTheme } from './themes/dragonGrinch.js';
 import { SoundManager } from './soundManager.js';
 
 export class GameManager {
@@ -157,8 +158,16 @@ export class GameManager {
         } else {
             // All identities revealed, start Round 1
             this.currentPlayerIndex = 0; // Reset for gameplay
+            this.pickNextRoundTheme();
             this.prepareTurn();
         }
+    }
+
+    pickNextRoundTheme() {
+        if (this.themeDeck.length === 0) {
+            this.refillThemeDeck();
+        }
+        this.currentRoundThemeIndex = this.themeDeck.pop();
     }
 
     refillThemeDeck() {
@@ -175,13 +184,8 @@ export class GameManager {
         // Before creating theme, set UI
         const player = this.players[this.currentPlayerIndex];
 
-        // Draw from Deck
-        if (this.themeDeck.length === 0) {
-            this.refillThemeDeck(); // Cycle if exhausted
-        }
-
-        // Remove replacement requirement is handled by popping unique indices from shuffled deck
-        const themeIndex = this.themeDeck.pop();
+        // Use the pre-selected theme for this round
+        const themeIndex = this.currentRoundThemeIndex;
 
         if (themeIndex === 0) {
             this.activeTheme = new ChristmasTreeTheme(this.ctx, this.canvas.width, this.canvas.height);
@@ -195,9 +199,12 @@ export class GameManager {
         } else if (themeIndex === 3) {
             this.activeTheme = new SleighFormula1Theme(this.ctx, this.canvas.width, this.canvas.height);
             this.currentThemeName = "Sleigh Formula 1";
-        } else {
+        } else if (themeIndex === 4) {
             this.activeTheme = new ChristmasTennisTheme(this.ctx, this.canvas.width, this.canvas.height);
             this.currentThemeName = "Christmas Pong";
+        } else {
+            this.activeTheme = new DragonGrinchTheme(this.ctx, this.canvas.width, this.canvas.height);
+            this.currentThemeName = "Dragon Grinch";
         }
 
         // Start Countdown Logic
@@ -253,7 +260,11 @@ export class GameManager {
         this.currentPlayerIndex++;
         if (this.currentPlayerIndex >= this.players.length) {
             // All players finished this round
-            this.showLeaderboard();
+            if (this.players.length === 1) {
+                this.startNextRound();
+            } else {
+                this.showLeaderboard();
+            }
         } else {
             // Next player
             this.prepareTurn();
@@ -276,10 +287,12 @@ export class GameManager {
 
     startNextRound() {
         this.currentRoundNumber++;
-        if (this.currentRoundNumber > this.maxRounds) {
+        // Infinite rounds for single player, otherwise check maxRounds
+        if (this.players.length > 1 && this.currentRoundNumber > this.maxRounds) {
             this.endGame();
         } else {
             this.currentPlayerIndex = 0;
+            this.pickNextRoundTheme();
             this.prepareTurn();
         }
     }

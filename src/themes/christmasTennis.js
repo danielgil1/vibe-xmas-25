@@ -116,7 +116,7 @@ export class ChristmasTennisTheme extends Theme {
         // Score / Fail Conditions
         if (this.ball.y - this.ball.radius < 0) {
             // AI Missed (Player scores)
-            this.score += 10;
+            this.score += 30;
             this.resetBall();
         } else if (this.ball.y + this.ball.radius > this.canvasHeight) {
             // Player Missed
