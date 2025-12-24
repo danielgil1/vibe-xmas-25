@@ -260,7 +260,11 @@ export class GameManager {
         this.currentPlayerIndex++;
         if (this.currentPlayerIndex >= this.players.length) {
             // All players finished this round
-            this.showLeaderboard();
+            if (this.players.length === 1) {
+                this.startNextRound();
+            } else {
+                this.showLeaderboard();
+            }
         } else {
             // Next player
             this.prepareTurn();
@@ -283,7 +287,8 @@ export class GameManager {
 
     startNextRound() {
         this.currentRoundNumber++;
-        if (this.currentRoundNumber > this.maxRounds) {
+        // Infinite rounds for single player, otherwise check maxRounds
+        if (this.players.length > 1 && this.currentRoundNumber > this.maxRounds) {
             this.endGame();
         } else {
             this.currentPlayerIndex = 0;
